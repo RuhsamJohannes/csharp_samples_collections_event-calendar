@@ -38,7 +38,6 @@ namespace EventCalendar.Logic
             else
             {
                 _events.Add(new Event(invitor, title, dateTime, maxParticipators));
-
                 return true;
             }
         }
@@ -70,9 +69,15 @@ namespace EventCalendar.Logic
         /// <returns>War die Registrierung erfolgreich?</returns>
         public bool RegisterPersonForEvent(Person person, Event ev)
         {
-            if (person != null || ev != null || GetPerson() )
+            if (person == null || ev == null || ev._participants.Contains(person) || ev._participants.Count >= ev.MaxParticipants && ev.MaxParticipants != 0)
             {
-
+                return false;
+            }
+            else 
+            {
+                ev._participants.Add(person);
+                person._events.Add(ev);
+                return true;
             }
         }
 
@@ -84,7 +89,16 @@ namespace EventCalendar.Logic
         /// <returns>War die Abmeldung erfolgreich?</returns>
         public bool UnregisterPersonForEvent(Person person, Event ev)
         {
-            throw new NotImplementedException();
+            if (person == null || ev == null || !ev._participants.Contains(person))
+            {
+                return false;
+            }
+            else
+            {
+                ev._participants.Remove(person);
+                person._events.Remove(ev);
+                return true;
+            }
         }
 
         /// <summary>
@@ -96,7 +110,15 @@ namespace EventCalendar.Logic
         /// <returns>Liste der Teilnehmer oder null im Fehlerfall</returns>
         public IList<Person> GetParticipatorsForEvent(Event ev)
         {
-            throw new NotImplementedException();
+            if (ev == null)
+            {
+                return null;
+            }
+            else
+            {
+                ev._participants.Sort();
+                return ev._participants;
+            }
         }
 
         /// <summary>
@@ -106,7 +128,15 @@ namespace EventCalendar.Logic
         /// <returns>Liste der Veranstaltungen oder null im Fehlerfall</returns>
         public List<Event> GetEventsForPerson(Person person)
         {
-            throw new NotImplementedException();
+            if (person == null)
+            {
+                return null;
+            }
+            else
+            {
+                person._events.Sort();
+                return person._events;
+            }
         }
 
         /// <summary>
@@ -116,8 +146,14 @@ namespace EventCalendar.Logic
         /// <returns>Anzahl oder 0 im Fehlerfall</returns>
         public int CountEventsForPerson(Person participator)
         {
-            throw new NotImplementedException();
+            if (participator == null)
+            {
+                return 0;
+            }
+            else 
+            { 
+                return participator._events.Count;
+            }
         }
-
     }
 }

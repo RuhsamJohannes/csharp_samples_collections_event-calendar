@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EventCalendar.Entities
 {
-    public class Event
+    public class Event : IComparable<Event>
     {
         private string _title;
         private int _maxParticipants;
@@ -26,7 +26,6 @@ namespace EventCalendar.Entities
                 {
                     throw new NullReferenceException(nameof(value));
                 }
-                
             }
         }
 
@@ -41,6 +40,11 @@ namespace EventCalendar.Entities
             DateTime = dateTime;
             MaxParticipants = participants;
             _participants = new List<Person>();
+        }
+
+        public int CompareTo(Event other)
+        {
+            return this.DateTime.CompareTo(other.DateTime);
         }
     }
 }
