@@ -10,7 +10,7 @@ namespace EventCalendar.Logic
     public class Controller
     {
         private readonly ICollection<Event> _events;
-        public int EventsCount { get { throw new NotImplementedException();} }
+        public int EventsCount { get { return _events.Count; } }
 
         public Controller()
         {
@@ -31,7 +31,16 @@ namespace EventCalendar.Logic
         /// <returns>Wurde die Veranstaltung angelegt</returns>
         public bool CreateEvent(Person invitor, string title, DateTime dateTime, int maxParticipators = 0)
         {
-            throw new NotImplementedException();
+            if (invitor == null || string.IsNullOrEmpty(title) || dateTime == null || dateTime < DateTime.Now || _events.Contains(GetEvent(title)))
+            {
+                return false;
+            }
+            else
+            {
+                _events.Add(new Event(invitor, title, dateTime, maxParticipators));
+
+                return true;
+            }
         }
 
 
@@ -42,7 +51,14 @@ namespace EventCalendar.Logic
         /// <returns>Event oder null, falls es keine Veranstaltung mit dem Titel gibt</returns>
         public Event GetEvent(string title)
         {
-            throw new NotImplementedException();
+            foreach (Event item in _events)
+            {
+                if (item.Title.Equals(title))
+                {
+                    return item;
+                }
+            }
+            return null;
         }
 
         /// <summary>
@@ -54,7 +70,10 @@ namespace EventCalendar.Logic
         /// <returns>War die Registrierung erfolgreich?</returns>
         public bool RegisterPersonForEvent(Person person, Event ev)
         {
-            throw new NotImplementedException();
+            if (person != null || ev != null || GetPerson() )
+            {
+
+            }
         }
 
         /// <summary>
